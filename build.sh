@@ -7,13 +7,13 @@ QQ_DOWNLOAD_URL="https://wiki.connect.qq.com/sdk%e4%b8%8b%e8%bd%bd"
 
 LOCAL_QQ_DOWNLOAD_HTML_FILE="QQDownload.html"
 
-QQ_SDK_DOWNLOAD_URL=""                                  # QQ互联SDK下载地址
-QQ_SDK_VERSION=""                                       # QQ互联SDK版本号
-LOCAL_QQ_ZIP="QQ_SDK.zip"                               # QQ互联SDK压缩包名字
+QQ_SDK_DOWNLOAD_URL="https://tangram-1251316161.file.myqcloud.com/files/20241009/2b983a30e7da8cd95299bcb2651746a1.zip"                                  # QQ互联SDK下载地址
+QQ_SDK_VERSION="3.5.17.4"                                       # QQ互联SDK版本号
+LOCAL_QQ_ZIP="2b983a30e7da8cd95299bcb2651746a1.zip"                               # QQ互联SDK压缩包名字
 LOCAL_QQ_UNZIP_DIRECTORY="QQ_SDK"                       # QQ互联SDK解压缩之后，文件夹名字
 LOCAL_QQ_PODSPEC_FILE_NAME="TencentOpenSDK-iOS.podspec" # QQ互联SDK podspec文件名
 LOCAL_QQ_PODSPEC_NAME="TencentOpenSDK-iOS"              # QQ互联SDK podspec name
-LAST_LOCAL_QQ_PODSPEC_VERSION=""                        # 本地podspec文件上次的版本号
+LAST_LOCAL_QQ_PODSPEC_VERSION="3.5.11"                        # 本地podspec文件上次的版本号
 
 function getLocalPodVersion() {
     if [ -f "${LOCAL_QQ_PODSPEC_FILE_NAME}" ]; then
@@ -30,51 +30,51 @@ function getLocalPodVersion() {
     fi
 }
 
-function getQQProperties() {
-    if [ -f "${LOCAL_QQ_DOWNLOAD_HTML_FILE}" ]; then
-        pattern="<td><a href=\"[^<]*\">iOS_SDK_V[^<]*</a></td>"
+# function getQQProperties() {
+#     if [ -f "${LOCAL_QQ_DOWNLOAD_HTML_FILE}" ]; then
+#         pattern="<td><a href=\"[^<]*\">iOS_SDK_V[^<]*</a></td>"
 
-        url1=$(cat ${LOCAL_QQ_DOWNLOAD_HTML_FILE} | grep -o -E "${pattern}")
-        url1="${url1#*\"}" # 从左向右截取第一个["]后的字符串
-        url1="${url1%\"*}" # 从右向左截取第一个["]前的字符串
-        echo "QQ互联官方下载url：${url1}"
-        QQ_SDK_DOWNLOAD_URL=${url1}
+#         url1=$(cat ${LOCAL_QQ_DOWNLOAD_HTML_FILE} | grep -o -E "${pattern}")
+#         url1="${url1#*\"}" # 从左向右截取第一个["]后的字符串
+#         url1="${url1%\"*}" # 从右向左截取第一个["]前的字符串
+#         echo "QQ互联官方下载url：${url1}"
+#         QQ_SDK_DOWNLOAD_URL=${url1}
 
-        version1=$(cat ${LOCAL_QQ_DOWNLOAD_HTML_FILE} | grep -o -E "${pattern}")
-        version1="${version1#*\iOS_SDK_V}" # 从左向右截取第一个[iOS_SDK_V]后的字符串
-        version1="${version1%\</a></td>*}" # 从右向左截取第一个[</a></td>]前的字符串
-        echo "QQ互联官方的版本号：${version1}"
-        QQ_SDK_VERSION=${version1}
-        # echo -e "\n"
-    else
-        echo "${LOCAL_QQ_DOWNLOAD_HTML_FILE}不存在"
-        # echo -e "\n"
-    fi
-}
+#         version1=$(cat ${LOCAL_QQ_DOWNLOAD_HTML_FILE} | grep -o -E "${pattern}")
+#         version1="${version1#*\iOS_SDK_V}" # 从左向右截取第一个[iOS_SDK_V]后的字符串
+#         version1="${version1%\</a></td>*}" # 从右向左截取第一个[</a></td>]前的字符串
+#         echo "QQ互联官方的版本号：${version1}"
+#         QQ_SDK_VERSION=${version1}
+#         # echo -e "\n"
+#     else
+#         echo "${LOCAL_QQ_DOWNLOAD_HTML_FILE}不存在"
+#         # echo -e "\n"
+#     fi
+# }
 
 # 获取本地podspec文件的version，以便于和官方version做比较
 getLocalPodVersion
 
 # 移除压缩文件夹
-rm -rf ${LOCAL_QQ_ZIP}
+# rm -rf ${LOCAL_QQ_ZIP}
 
-# 移除解压缩文件夹
-rm -rf ${LOCAL_QQ_UNZIP_DIRECTORY}
+# # 移除解压缩文件夹
+# rm -rf ${LOCAL_QQ_UNZIP_DIRECTORY}
 
-# 移除html
-rm -rf ${LOCAL_QQ_DOWNLOAD_HTML_FILE}
+# # 移除html
+# rm -rf ${LOCAL_QQ_DOWNLOAD_HTML_FILE}
 
-# 下载html
-curl ${QQ_DOWNLOAD_URL} >${LOCAL_QQ_DOWNLOAD_HTML_FILE}
+# # 下载html
+# curl ${QQ_DOWNLOAD_URL} >${LOCAL_QQ_DOWNLOAD_HTML_FILE}
 
 # 获取QQ互联官方SDK官方属性（sdk下载url，sdk版本）
-getQQProperties
+# getQQProperties
 
 # 下载zip
-curl "${QQ_SDK_DOWNLOAD_URL}" -o ${LOCAL_QQ_ZIP}
+# curl "${QQ_SDK_DOWNLOAD_URL}" -o ${LOCAL_QQ_ZIP}
 
-# 解压缩zip
-unzip ${LOCAL_QQ_ZIP} -d ${LOCAL_QQ_UNZIP_DIRECTORY}
+# # 解压缩zip
+# unzip ${LOCAL_QQ_ZIP} -d ${LOCAL_QQ_UNZIP_DIRECTORY}
 
 function makePodSpec() {
     if [ "${LAST_LOCAL_QQ_PODSPEC_VERSION}" != "${QQ_SDK_VERSION}" ]; then
@@ -107,11 +107,11 @@ EOF
 Pod::Spec.new do |spec|
     spec.name                   = '${LOCAL_QQ_PODSPEC_NAME}'
     spec.version                = '${QQ_SDK_VERSION}' # 版本号和QQ的保持一致
-    spec.homepage               = 'https://github.com/liujunliuhong/TencentOpenSDK'
-    spec.source                 = { :git => 'https://github.com/liujunliuhong/TencentOpenSDK.git', :tag => spec.version }
+    spec.homepage               = 'https://github.com/qq738818311/TencentOpenSDK'
+    spec.source                 = { :git => 'https://github.com/qq738818311/TencentOpenSDK.git', :tag => spec.version }
     spec.summary                = 'Tencent open SDK'
     spec.license                = { :type => 'MIT', :file => 'LICENSE' }
-    spec.author                 = { 'liujunliuhong' => '1035841713@qq.com' }
+    spec.author                 = { 'qq738818311' => 'penfee@qq.com' }
     spec.platform               = :ios, '9.0'
     spec.ios.deployment_target  = '9.0'
     spec.requires_arc           = true
